@@ -1,0 +1,829 @@
+/* ==========================================================================
+   KOZMINSKI ESCAPE: POLOWANIE NA ECTS - ARKUSZ STYLÓW CSS
+   Barwy Akademii Leona Koźmińskiego: Granat (#002B49), Złoto (#D4AF37),
+   Szmaragdowa zieleń Zielonego Patio (#10B981) oraz czyste odcienie bieli/grafitu.
+   ========================================================================== */
+
+:root {
+  --alk-navy-dark: #071527;
+  --alk-navy: #002B49;
+  --alk-navy-light: #0d3d63;
+  --alk-blue-accent: #2563eb;
+  --alk-gold: #fbbf24;
+  --alk-gold-dark: #d97706;
+  --alk-gold-glow: rgba(251, 191, 36, 0.4);
+  --alk-patio-green: #10b981;
+  --alk-patio-glow: rgba(16, 185, 129, 0.35);
+  --alk-danger-red: #ef4444;
+  --alk-surface: #0c1a2e;
+  --alk-surface-card: rgba(13, 33, 58, 0.88);
+  --alk-surface-border: rgba(251, 191, 36, 0.25);
+  --alk-text-main: #f8fafc;
+  --alk-text-muted: #94a3b8;
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background: radial-gradient(circle at 50% 20%, #0c2340 0%, #061220 60%, #030810 100%);
+  color: var(--alk-text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ==========================================================================
+   GŁÓWNY KONTENER APLIKACJI
+   ========================================================================== */
+#game-app {
+  width: 100%;
+  max-width: 960px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px 24px;
+  position: relative;
+}
+
+/* ==========================================================================
+   1. PASEK STANU (HUD) U GÓRY
+   ========================================================================== */
+#hud {
+  display: grid;
+  grid-template-columns: auto 1.2fr 1fr 1.3fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--alk-surface-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--alk-surface-border);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 43, 73, 0.4);
+  border-radius: 14px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 20;
+}
+
+/* Brand */
+.hud-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-badge {
+  background: linear-gradient(135deg, #002B49, #001729);
+  color: var(--alk-gold);
+  border: 1.5px solid var(--alk-gold);
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--alk-gold-glow);
+}
+
+.hud-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-game-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.hud-game-subtitle {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--alk-gold);
+  letter-spacing: 0.8px;
+}
+
+/* Sekcje wskaźników */
+.hud-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(4, 15, 29, 0.65);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--alk-text-muted);
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.stat-value strong {
+  color: var(--alk-gold);
+  font-size: 15px;
+}
+
+.stat-max {
+  color: var(--alk-text-muted);
+  font-size: 11px;
+}
+
+/* Paski postępu */
+.hud-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.hud-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+}
+
+.ects-fill {
+  background: linear-gradient(90deg, #d97706, #fbbf24, #fef08a);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+}
+
+.stamina-fill {
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #bae6fd);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+}
+
+.stamina-low {
+  background: linear-gradient(90deg, #dc2626, #f87171) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8) !important;
+}
+
+/* Status Kampusu */
+.campus-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.campus-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--alk-patio-green);
+  box-shadow: 0 0 8px var(--alk-patio-green);
+  flex-shrink: 0;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Przyciski w HUD */
+.hud-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: var(--alk-gold);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   2. KONTENER Z CANVAS I DYMKIEM PROFESORA
+   ========================================================================== */
+#game-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+#canvas-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  background: #020710;
+  border-radius: 16px;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 43, 73, 0.6);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 800 / 540;
+  background-color: #0b1d30;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Dymek na wypowiedzi profesora */
+.speech-bubble {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid var(--alk-gold);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(217, 119, 6, 0.4);
+  z-index: 15;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.speech-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-25px);
+  pointer-events: none;
+}
+
+.prof-avatar {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1.5px solid var(--alk-gold);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.prof-status-alert {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  background: var(--alk-danger-red);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #000;
+  animation: pulse-dot 1s infinite;
+}
+
+.prof-speech-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.prof-name {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--alk-gold);
+  letter-spacing: 0.5px;
+}
+
+.prof-quote {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   3. EKRANY MODALNE (Start, Porażka, Zwycięstwo, Pauza)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 8, 16, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 580px;
+  background: linear-gradient(160deg, rgba(14, 30, 52, 0.96) 0%, rgba(7, 18, 33, 0.98) 100%);
+  border: 1.5px solid var(--alk-surface-border);
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 43, 73, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Nagłówki modali */
+.modal-header {
+  text-align: center;
+}
+
+.badge-alk {
+  display: inline-block;
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--alk-gold);
+  border: 1px solid var(--alk-gold);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.badge-fail {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid #ef4444;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.badge-success {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid #10b981;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.modal-headline {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.accent-text {
+  color: var(--alk-gold);
+  text-shadow: 0 0 15px var(--alk-gold-glow);
+}
+
+.modal-tagline {
+  font-size: 13px;
+  color: var(--alk-text-muted);
+  line-height: 1.4;
+}
+
+/* Legenda elementów */
+.section-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--alk-gold);
+  margin-bottom: 10px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(4, 15, 29, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.legend-icon {
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.legend-desc strong {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.legend-desc span {
+  font-size: 11px;
+  color: var(--alk-text-muted);
+  line-height: 1.25;
+}
+
+/* Kontrolki sterowania */
+.controls-guide {
+  margin-top: 14px;
+}
+
+.controls-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.key-pill {
+  background: rgba(4, 15, 29, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+kbd {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--alk-gold);
+}
+
+/* Podsumowania wyników */
+.score-summary-box {
+  background: rgba(4, 15, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.victory-summary {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(6, 26, 21, 0.85);
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--alk-text-muted);
+}
+
+.score-row strong {
+  font-size: 15px;
+  color: #fff;
+  font-family: var(--font-mono);
+}
+
+.text-green {
+  color: #34d399 !important;
+}
+
+.quote-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--alk-gold);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.quote-author {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--alk-gold);
+  margin-top: 4px;
+}
+
+.victory-quote {
+  border-left-color: var(--alk-patio-green);
+}
+
+.victory-quote .quote-author {
+  color: var(--alk-patio-green);
+}
+
+/* Przyciski w modalach */
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #071527;
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35);
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(217, 119, 6, 0.5);
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.pulse-btn {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.6); }
+  70% { box-shadow: 0 0 0 14px rgba(251, 191, 36, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+}
+
+/* ==========================================================================
+   4. WIRTUALNE PRZYCISKI DOTYKOWE (D-PAD I SPRINT)
+   Ukryte na PC, a widoczne na telefonach / urządzeniach dotykowych
+   ========================================================================== */
+#mobile-controls {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px 4px;
+  margin-top: 8px;
+  touch-action: none;
+}
+
+/* D-Pad */
+.touch-dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dpad-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dpad-center {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.dpad-btn {
+  width: 48px;
+  height: 48px;
+  background: rgba(13, 33, 58, 0.85);
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  color: var(--alk-gold);
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s, background 0.08s;
+}
+
+.dpad-btn:active, .dpad-btn.touch-active {
+  background: var(--alk-gold);
+  color: #071527;
+  transform: scale(0.92);
+}
+
+/* Przycisk akcji Sprint */
+.touch-actions {
+  display: flex;
+  align-items: center;
+}
+
+.touch-action-btn {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2563eb, #1e3a8a);
+  border: 2.5px solid #60a5fa;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+  touch-action: none;
+  transition: transform 0.08s, filter 0.08s;
+}
+
+.touch-action-btn:active, .touch-action-btn.touch-active {
+  transform: scale(0.92);
+  filter: brightness(1.25);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.7);
+}
+
+.action-icon {
+  font-size: 24px;
+}
+
+.action-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+/* Reguły ukrywania i pokazywania sterowania dotykowego:
+   Ukryte na PC ze standardowym kursorem myszy i dużym ekranem,
+   widoczne na urządzeniach dotykowych i mniejszych ekranach */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  #mobile-controls {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   STOPKA INFORMACYJNA
+   ========================================================================== */
+#game-footer {
+  width: 100%;
+  max-width: 800px;
+  margin: 12px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #64748b;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 8px;
+}
+
+.footer-hint strong {
+  color: #cbd5e1;
+}
+
+/* ==========================================================================
+   RESPONSYWNOŚĆ
+   ========================================================================== */
+@media (max-width: 768px) {
+  #hud {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    padding: 8px 12px;
+  }
+
+  .hud-brand {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  .hud-stat-campus {
+    grid-column: 1 / -1;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-headline {
+    font-size: 20px;
+  }
+
+  #game-footer {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+}
